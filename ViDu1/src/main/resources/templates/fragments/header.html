@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<header th:fragment="header" class="topbar">
+    <div class="brand">
+        <a th:href="@{/}">IOTSTAR SHOP</a>
+    </div>
+
+    <!-- Khi người dùng đã đăng nhập -->
+    <div class="account" sec:authorize="isAuthenticated()">
+        <span>Xin chào: <strong sec:authentication="name">user@gmail.com</strong></span>
+        <span class="badge" sec:authentication="principal.authorities">[ROLE_USER]</span>
+
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button class="btn-logout" type="submit">Đăng xuất</button>
+        </form>
+    </div>
+
+    <!-- Khi người dùng chưa đăng nhập -->
+    <div class="account" sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">Đăng nhập</a>
+    </div>
+</header>
+
+</body>
+</html>

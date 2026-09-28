@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ - Vi du 1</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="container">
+    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <h1>Ví dụ 1: Login cơ bản bằng Email</h1>
+        <p>Hệ thống sử dụng Spring Boot 4.1.1 + Spring Security 7 + MapStruct 1.6.3 + Thymeleaf (không dùng Layout Dialect).</p>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+        <p>Đăng nhập thành công! Thông tin tài khoản và Role được hiển thị trực tiếp trên thanh Header phía trên.</p>
+    </div>
+</main>
+
+</body>
+</html>

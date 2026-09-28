@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layouts/layout :: head('Quản lý Products')}"></head>
+<body>
+
+<div th:replace="~{layouts/layout :: page(~{::main})}">
+    <main>
+        <h1>Quản lý Products</h1>
+
+        <div th:if="${success}" class="alert success" th:text="${success}"></div>
+
+        <div class="toolbar">
+            <form th:action="@{/products}" method="get">
+                <input name="keyword" th:value="${keyword}" placeholder="Tìm theo tên sản phẩm, mô tả...">
+                <input type="hidden" name="size" th:value="${size}">
+                <button type="submit" class="button">Tìm kiếm</button>
+            </form>
+            <a class="button" th:href="@{/products/create}">+ Thêm Product</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá tiền</th>
+                    <th>Người đăng</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${products.content}">
+                    <td th:text="${p.id}">1</td>
+                    <td>
+                        <img th:if="${p.imageUrl != null}"
+                             th:src="${#strings.substringBefore(p.imageUrl, '|')}"
+                             class="thumb" alt="Product Image">
+                        <span th:unless="${p.imageUrl != null}" style="color: #94a3b8; font-style: italic;">Không có ảnh</span>
+                    </td>
+                    <td>
+                        <strong th:text="${p.name}">Tên sản phẩm</strong>
+                        <div style="font-size: 12px; color: #64748b;" th:text="${p.description}">Mô tả ngắn</div>
+                    </td>
+                    <td style="color: #dc2626; font-weight: bold;"
+                        th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">100.000 VNĐ</td>
+                    <td th:text="${p.username}">user01</td>
+                    <td class="actions">
+                        <a th:href="@{/products/edit/{id}(id=${p.id})}" class="button" style="padding: 5px 10px; font-size: 12px;">Sửa</a>
+                        <form th:action="@{/products/delete/{id}(id=${p.id})}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button class="danger-link" type="submit">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${products.empty}">
+                    <td colspan="6" style="text-align: center; padding: 20px;">Không có sản phẩm nào.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Phân trang -->
+        <div class="pagination" th:if="${products.totalPages > 1}">
+            <a th:if="${products.hasPrevious()}" th:href="@{/products(page=${products.number - 1}, size=${size}, keyword=${keyword})}">« Trước</a>
+            <span th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}">
+                <a th:classappend="${i == products.number ? 'active' : ''}"
+                   th:href="@{/products(page=${i}, size=${size}, keyword=${keyword})}"
+                   th:text="${i + 1}">1</a>
+            </span>
+            <a th:if="${products.hasNext()}" th:href="@{/products(page=${products.number + 1}, size=${size}, keyword=${keyword})}">Sau »</a>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
